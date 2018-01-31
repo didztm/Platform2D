@@ -33,24 +33,25 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	void OnCollisionEnter2D(Collision2D collision2D) {
-		/*
+	/*void OnCollisionEnter2D(Collision2D collision2D) {
+		
 		if (collision2D.relativeVelocity.magnitude > 20){
 			Boost = Instantiate(Resources.Load("Prefabs/Cloud"), transform.position, transform.rotation) as GameObject;
 		//	cloudanim.Play("cloud");	
 
-		}*/
-	}
+		}
+	}*/
 
 
 	
 	// Update is called once per frame
 	void Update () {
-    
-	if ( (isGrounded || !doubleJump))
+
+	if ((isGrounded ))
 		{
 			rb2d.AddForce(new Vector2(0,jumpForce));
-            if (!doubleJump && !isGrounded)
+
+			if (!doubleJump && !isGrounded)
 			{
 				doubleJump = true;
 				//Boost = Instantiate(Resources.Load("Prefabs/Cloud"), transform.position, transform.rotation) as GameObject;
@@ -69,20 +70,21 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-    void FixedUpdate()
-    {
+	void FixedUpdate()
+	{
+		//if (isGrounded) 
+		//	doubleJump = false;
+
+
+		float hor = Input.GetAxis ("Horizontal");
+
+		anim.SetFloat ("Speed", Mathf.Abs (hor));
+
+		rb2d.velocity = new Vector2 (hor * maxSpeed, rb2d.velocity.y);
+		  
+		isGrounded = Physics2D.OverlapCircle (groundCheck.position, 0.15F, whatIsGround);
         if (isGrounded)
-            doubleJump = false;
-
-
-        float hor = Input.GetAxis("Horizontal");
-
-        anim.SetFloat("Speed", Mathf.Abs(hor));
-
-        rb2d.velocity = new Vector2(hor * maxSpeed, rb2d.velocity.y);
-
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15F, whatIsGround);
-        if (isGrounded){
+        {
             rb2d.AddForce(new Vector2(0, -jumpForce));
         }
 		anim.SetBool ("IsGrounded", isGrounded);
