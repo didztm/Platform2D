@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformController : MonoBehaviour {
+    [Header("Script setup")]
     public GameObject platformPrefab;
-    public Transform spawn;
+    public Transform spawn1;
+    public Transform spawn2;
+    public Transform spawn3;
+    public Transform player;
+    [Header("Spawn pref")]
     public List<GameObject> platformPool;
     public int numberOfPrefab;
-    public float timeBetweenPlatform=2f;
-    private bool coroutineLock=false;
+    public float spawnY;
+    public float timeBetweenPlatformSpawn1 = 2f;
+    private int tempNumSpawn;
+    private int numSpawn;
+    public bool coroutineSpawnLock1 = false;
+    public float speedVelocity=1f;
 
-
-
-    private int randomSpawn;
 
     // Use this for initialization
     void Start () {
@@ -21,24 +27,28 @@ public class PlatformController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!coroutineLock) {
-            coroutineLock = true;
-            StartCoroutine(Spawn());
+        if (!coroutineSpawnLock1) {
+            coroutineSpawnLock1 = true;
+            StartCoroutine(Spawn1( spawnY));
         }
-        
-        
+       
+
     }
-    private void SpawnSwitch(int randomSpawn) {
+    private void SpawnSwitch(int randomSpawn,float playerPosition) {
+        float randomX;
         switch (randomSpawn)
         {
             case 1:
-                //MovePlatform(spawn1);
+                randomX = Random.Range(-7f, -3f);
+                MovePlatform(randomX,spawn1, playerPosition);
                 break;
             case 2:
-               // MovePlatform(spawn2);
+                randomX = Random.Range(-3f, 3f);
+                MovePlatform(randomX, spawn2, playerPosition);
                 break;
             case 3:
-               // MovePlatform(spawn3);
+                randomX = Random.Range(-3f, 7f);
+                MovePlatform(randomX,spawn3, playerPosition);
                 break;
             case 4:
                // MovePlatform(spawn4);
@@ -58,26 +68,51 @@ public class PlatformController : MonoBehaviour {
 
         }
     }
-    void MovePlatform(float randomX)
+    void MovePlatform(float randomX,Transform spaw, float playerPosition)
     {
         for (int i = 0; i < platformPool.Count; i++)
         {
-            
             if (platformPool[i].activeSelf==false){
-                Vector3 randomPosition = new Vector3(randomX, spawn.position.y, 0f);
+                Vector3 randomPosition = new Vector3(randomX, playerPosition, 0f);
                 platformPool[i].gameObject.SetActive(true);
-                platformPool[i].GetComponent<Rigidbody2D>().mass=Random.Range(10000f,20000f);
-                platformPool[i].GetComponent<Transform>().SetParent(spawn);
+                platformPool[i].GetComponent<Rigidbody2D>().gravityScale= 0;
+                platformPool[i].GetComponent<Rigidbody2D>().velocity=new Vector2(0,-speedVelocity);
+                platformPool[i].GetComponent<Transform>().SetParent(spaw);
                 platformPool[i].GetComponent<Transform>().position = randomPosition;
                 i=platformPool.Count ;
             }
         }
     }
-    IEnumerator Spawn()
+    IEnumerator Spawn1(float playerPosition)
     {
-        float randomX = Random.Range(-7.41f, 7.42f);
-        yield return new WaitForSeconds(timeBetweenPlatform);
-        MovePlatform(randomX);
-        coroutineLock = false;
+        // int randomSpawn = Random.Range(1,4);
+        
+        /* if (numSpawn < 4 )
+         {
+             numSpawn++;
+
+         }
+         else
+         {
+             randomSpawn = -4;
+         }
+         if (randomSpawn < 0)
+         {
+             randomSpawn = -randomSpawn;
+         }*/
+
+        //Debug.Log(randomSpawn);
+        yield return new WaitForSeconds(timeBetweenPlatformSpawn1);
+        // SpawnSwitch(randomSpawn,playerPosition);
+        //MovePlatform(randomX,spawn1, playerPosition);
+        SpawnRandom(playerPosition);
+        coroutineSpawnLock1 = false;
+        
     }
+   
+    public void SpawnRandom(float playerPosition)
+    {
+        float randomSpawn = Random.Range(-6f, 6f);
+        MovePlatform(randomSpawn, spawn1, playerPosition);
     }
+}

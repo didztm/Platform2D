@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ground : MonoBehaviour {
+public class Pit : MonoBehaviour {
 
-    // Use this for initialization
-    private float timeUnity;
+	// Use this for initialization
 	void Start () {
 		
 	}
@@ -16,17 +15,10 @@ public class Ground : MonoBehaviour {
 	}
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("platform"))
-        {
-            collision.transform.gameObject.SetActive(false);
-        }
         if (collision.transform.CompareTag("player"))
         {
+
             collision.transform.gameObject.SetActive(false);
-            timeUnity = Time.timeScale;
-            Time.timeScale = 0f;
-            Debug.Log(timeUnity);
         }
     }
-    
 }
