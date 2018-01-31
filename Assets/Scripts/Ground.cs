@@ -5,7 +5,6 @@ using UnityEngine;
 public class Ground : MonoBehaviour {
 
     // Use this for initialization
-    private float timeUnity;
 	void Start () {
 		
 	}
@@ -23,9 +22,7 @@ public class Ground : MonoBehaviour {
         if (collision.transform.CompareTag("player"))
         {
             collision.transform.gameObject.SetActive(false);
-            timeUnity = Time.timeScale;
             Time.timeScale = 0f;
-            Debug.Log(timeUnity);
         }
     }
     

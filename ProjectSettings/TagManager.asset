@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Fly
   - platform
+  - player
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Roof
   - Platform
   - Ground
-  - 
-  - 
+  - Pit
+  - Player
   - 
   - 
   - 
